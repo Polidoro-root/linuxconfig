@@ -1,3 +1,4 @@
+HOME=/home/$(logname)
 if [ -d $HOME/.oh-my-zsh ] &&
   [ -d $HOME/.asdf ] &&
   [ -d $HOME/.config/nvim ] &&
@@ -61,8 +62,17 @@ pacman -Syyu --noconfirm \
   zsh-theme-powerlevel10k
 fi
 
+git init --bare $HOME/.cfg
+alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+config config --local status.showUntrackedFiles no
+echo "alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'" >> $HOME/.zshrc
+source $HOME/.zshrc
+
+config remote add origin git@github.com:Polidoro-root/linuxconfig.git
+config pull origin main
+
 # Install asdf
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.13.1
+git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v0.13.1
 
 # Install asdf plugins
 asdf plugin add golang https://github.com/asdf-community/asdf-golang.git \
@@ -79,4 +89,4 @@ asdf install golang latest \
   && asdf install nodejs latest \
   && asdf install lua latest \
   && asdf install php latest
-  && asdf install rust latest
+  && asdf install rust 1.69.0
