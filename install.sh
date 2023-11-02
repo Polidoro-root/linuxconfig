@@ -1,4 +1,9 @@
+#!/bin/bash
+
 HOME=/home/$(logname)
+
+cd $HOME
+
 if [ -d $HOME/.oh-my-zsh ] &&
   [ -d $HOME/.asdf ] &&
   [ -d $HOME/.config/nvim ] &&
@@ -18,21 +23,23 @@ pacman-key --init \
 # points to fastest mirrors
 pacman-mirrors --fasttrack
 
+# Install needed packages
+pacman -Syyu --needed --noconfim \
+  base-devel \
+  git
+
 # Install base packages
 pacman -Syyu --noconfirm \
   atuin \
   autoconf \
   alacritty \
-  base-devel \
   bat \
   bison \
-  build-essential \
   curl \
   docker \
   docker-compose \
   gcc \
   go \
-  git \
   git-lfs \
   fd \
   flatpak \
@@ -49,11 +56,11 @@ pacman -Syyu --noconfirm \
   libssh \
   neovim \
   nerd-fonts \
+  networkmanager \
   nodejs \
   npm \
   openssh \
   php \
-  protonvpn \
   python \
   python-pip \
   ripgrep \
@@ -74,9 +81,6 @@ pacman -Syyu --noconfirm \
 
 # enable flatpak
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-
-# enable firewall
-ufw enable
 
 systemctl enable ufw
 fi
