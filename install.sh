@@ -9,6 +9,15 @@ fi
 
 
 if [ -f /etc/arch-release ]; then
+# setup keyring
+pacman-key --init \
+    && pacman-key --populate archlinux \
+    && sed 's/ParallelDownloads = \d+/ParallelDownloads = ${PACMAN_PARALLELDOWNLOADS}/g' -i /etc/pacman.conf \
+    && sed 's/NoProgressBar/#NoProgressBar/g' -i /etc/pacman.conf
+
+# points to fastest mirrors
+pacman-mirrors --fasttrack
+
 # Install base packages
 pacman -Syyu --noconfirm \
   atuin \
@@ -26,11 +35,13 @@ pacman -Syyu --noconfirm \
   git \
   git-lfs \
   fd \
-  font-config \
+  flatpak \
+  fontconfig \
   fzf \
   git \
   git-lfs \
   go \
+  gufw \
   htop \
   jdk17-openjdk \
   jq \
@@ -38,7 +49,6 @@ pacman -Syyu --noconfirm \
   libssh \
   neovim \
   nerd-fonts \
-  nerd-fonts-complete-mono-glyphs \
   nodejs \
   npm \
   openssh \
@@ -48,19 +58,39 @@ pacman -Syyu --noconfirm \
   python-pip \
   ripgrep \
   rust \
+  timeshift \
   tmux \
   tmuxp \
+  ufw \
   unzip \
   wget \
   yarn \
-  yay \
   zsh \
   zsh-autosuggestions \
   zsh-completions \
   zsh-history-substring-search \
   zsh-syntax-highlighting \
   zsh-theme-powerlevel10k
+
+# enable flatpak
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+# enable firewall
+ufw enable
+
+systemctl enable ufw
 fi
+
+if [ -f /etc/manjaro-release ]; then
+# install manjaro specific packages
+pacman -S --noconfirm \
+  yay \
+  pamac
+fi
+
+
+# Install asdf
+git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v0.13.1
 
 git init --bare $HOME/.cfg
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
@@ -68,11 +98,8 @@ config config --local status.showUntrackedFiles no
 echo "alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'" >> $HOME/.zshrc
 source $HOME/.zshrc
 
-config remote add origin git@github.com:Polidoro-root/linuxconfig.git
+config remote add origin https://github.com/Polidoro-root/linuxconfig.git
 config pull origin main
-
-# Install asdf
-git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v0.13.1
 
 # Install asdf plugins
 asdf plugin add golang https://github.com/asdf-community/asdf-golang.git \
@@ -88,5 +115,5 @@ asdf install golang latest \
   && asdf install java temurin-17.0.8+7  \
   && asdf install nodejs latest \
   && asdf install lua latest \
-  && asdf install php latest
+  && asdf install php latest \
   && asdf install rust 1.69.0
