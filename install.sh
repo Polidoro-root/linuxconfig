@@ -1,6 +1,6 @@
 #!/bin/bash
 
-HOME=/home/$USER
+HOME=/home/polidoro
 
 cd $HOME
 
@@ -20,11 +20,8 @@ pacman-key --init \
     && sed 's/ParallelDownloads = \d+/ParallelDownloads = ${PACMAN_PARALLELDOWNLOADS}/g' -i /etc/pacman.conf \
     && sed 's/NoProgressBar/#NoProgressBar/g' -i /etc/pacman.conf
 
-# points to fastest mirrors
-pacman-mirrors --fasttrack
-
 # Install needed packages
-pacman -Syyu --needed --noconfim \
+pacman -Syyu --needed --noconfirm \
   base-devel \
   git
 
@@ -60,6 +57,7 @@ pacman -Syyu --noconfirm \
   nodejs \
   npm \
   openssh \
+  pacman-mirrorlist \
   php \
   python \
   python-pip \
