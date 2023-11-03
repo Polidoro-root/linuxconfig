@@ -1,6 +1,6 @@
 #!/bin/bash
 
-HOME=/home/$(logname)
+HOME=/home/$USER
 
 cd $HOME
 
