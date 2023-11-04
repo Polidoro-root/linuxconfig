@@ -16,16 +16,16 @@ selection:
 
 font:
   normal:
-    family: MesloLGS NF
+    family: Meslo LGS Nerd Font
     style:  Medium
   bold:
-    family:  MesloLGS NF
+    family:  Meslo LGS Nerd Font
     style:  Bold
   italic:
-    family: MesloLGS NF
+    family: Meslo LGS Nerd Font
     style:  Regular Italic
   bold_italic:
-    family: MesloLGS NF
+    family: Meslo LGS Nerd Font
     style: Bold Italic
   size: 11
 

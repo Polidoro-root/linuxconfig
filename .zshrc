@@ -61,9 +61,9 @@ zinit light zsh-users/zsh-autosuggestions
 zinit light zsh-users/zsh-completions
 
 
-export GOPATH=$HOME/.asdf/installs/golang/1.20/packages
-export GOROOT=$HOME/.asdf/installs/golang/1.20/go
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+# export GOPATH=$HOME/.asdf/installs/golang/1.20/packages
+# export GOROOT=$HOME/.asdf/installs/golang/1.20/go
+# export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 export PATH=$PATH:$(go env GOPATH)/bin
 
 export PATH=$PATH:$HOME/.cargo/bin
@@ -71,7 +71,7 @@ export PATH=$PATH:$HOME/.cargo/bin
 export PATH=$PATH:$HOME/.local/bin
 
 ## Set $JAVA_HOME
-. ~/.asdf/plugins/java/set-java-home.zsh
+# . ~/.asdf/plugins/java/set-java-home.zsh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -84,3 +84,5 @@ case ":$PATH:" in
 esac
 # pnpm end
 alias config='/usr/bin/git --git-dir=$HOME/.cfg --work-tree=$HOME'
+
+export PATH=~/.npm-global/bin:$PATH
