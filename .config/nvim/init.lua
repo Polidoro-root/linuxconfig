@@ -31,7 +31,57 @@ require("lazy").setup({
       vim.cmd("colorscheme tokyonight-night")
     end,
   },
-  { "folke/neodev.nvim",              opts = {} },
+  {
+    "folke/neodev.nvim",
+    opts = {},
+  },
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    opts = {
+      -- add any options here
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "MunifTanjim/nui.nvim",
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+
+      "rcarriga/nvim-notify",
+    }
+  },
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    opts = {
+      -- add any options here
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "MunifTanjim/nui.nvim",
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+
+      "rcarriga/nvim-notify",
+    }
+  },
+  {
+    "folke/which-key.nvim",
+
+    event = "VeryLazy",
+    init = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
+    end,
+    opts = {
+      -- your configuration comes here
+
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    }
+  },
   {
     'nvim-telescope/telescope.nvim',
     tag = '0.1.4',
@@ -52,19 +102,6 @@ require("lazy").setup({
     dependencies = { 'nvim-tree/nvim-web-devicons', opt = true }
   },
   { 'lewis6991/gitsigns.nvim' },
-  {
-    "folke/which-key.nvim",
-    event = "VeryLazy",
-    init = function()
-      vim.o.timeout = true
-      vim.o.timeoutlen = 300
-    end,
-    opts = {
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
-    }
-  },
   {
     'williamboman/mason.nvim',
     cmd = "Mason",
@@ -165,35 +202,84 @@ require("lazy").setup({
     dependencies = { { 'nvim-tree/nvim-web-devicons' } }
   },
   { 'github/copilot.vim' },
+  {
+    "kylechui/nvim-surround",
+    version = "*", -- Use for stability; omit to use `main` branch for the latest features
+    event = "VeryLazy",
+    config = function()
+      require("nvim-surround").setup({
+        -- Configuration here, or leave empty to use defaults
+      })
+    end
+  },
+  {
+    'Wansmer/treesj',
+    keys = { '<leader>m', '<leader>j', '<leader>s' },
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+  },
+  { 'kevinhwang91/nvim-bqf', },
+  { 'f-person/git-blame.nvim' },
+
+})
+
+require("nvim-surround").setup()
+
+require("gitblame").setup({
+  enabled = true
 })
 
 require("neodev").setup()
 
 require('gitsigns').setup()
 
+-- local actions = require("telescope.actions")
+-- local trouble = require("trouble.providers.telescope")
 
 require("telescope").setup {
+  --[[ defaults = {
+    mappings = {
+      i = { ["<c-t>"] = trouble.open_with_trouble },
+      n = { ["<c-t>"] = trouble.open_with_trouble },
+    },
+  }, ]]
   extensions = {
     file_browser = {
       files = true,
       -- disables netrw and use telescope-file-browser in its place
       hijack_netrw = true,
-      mappings = {
-        ["i"] = {
-          -- your custom insert mode mappings
-        },
-        ["n"] = {
-          -- your custom normal mode mappings
-        },
-      },
     }
   }
 }
 
-require("telescope").load_extension "file_browser"
+require('treesj').setup({
+  ---@type boolean Use default keymaps (<space>m - toggle, <space>j - join, <space>s - split)
+  use_default_keymaps = true,
+  ---@type boolean Node with syntax error will not be formatted
+  check_syntax_error = true,
 
--- set termguicolors to enable highlight groups
-vim.opt.termguicolors = true
+  ---If line after join will be longer than max value,
+  ---@type number If line after join will be longer than max value, node will not be formatted
+  max_join_length = 120,
+  ---Cursor behavior:
+  ---hold - cursor follows the node/place on which it was called
+
+  ---start - cursor jumps to the first symbol of the node being formatted
+  ---end - cursor jumps to the last symbol of the node being formatted
+  ---@type 'hold'|'start'|'end'
+  cursor_behavior = 'hold',
+  ---@type boolean Notify about possible problems or not
+  notify = true,
+  ---@type boolean Use `dot` for repeat action
+  dot_repeat = true,
+  ---@type nil|function Callback for treesj error handler. func (err_text, level, ...other_text)
+
+  on_error = nil,
+  ---@type table Presets for languages
+
+  -- langs = {}, -- See the default presets in lua/treesj/langs
+})
+
+require("telescope").load_extension "file_browser"
 
 require 'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all" (the five listed parsers should always be installed)
@@ -262,49 +348,10 @@ vim.opt.smartindent = true
 vim.opt.wrap = false
 vim.opt.backup = false
 
-
 vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 
-vim.keymap.set("n", "<leader>w", "<cmd>write<cr>")
-vim.keymap.set("n", "<leader>e", "<cmd>Lexplore<cr>")
-vim.keymap.set("n", "<leader>u", "<cmd>UndotreeToggle<cr><cmd>UndotreeFocus<cr>")
-vim.keymap.set({ "n", "x", "o" }, "<leader>h", "^")
-vim.keymap.set({ "n", "x", "o" }, "<leader>l", "g_")
-vim.keymap.set("n", "<leader>a", ":keepjumps normal! ggVG<cr>")
-
-local builtin = require('telescope.builtin')
-vim.api.nvim_set_keymap(
-  "n",
-  "<space>fe",
-  ":Telescope file_browser<CR>",
-  { noremap = true }
-)
-vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
-vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
-vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
-vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
-
 local lsp_zero = require("lsp-zero")
-
-lsp_zero.on_attach(function(client, bufnr)
-  lsp_zero.default_keymaps({ buffer = bufnr })
-  local opts = { buffer = bufnr, remap = false }
-
-  vim.keymap.set({ 'n', 'x' }, 'gq', function()
-    vim.lsp.buf.format({ async = false, timeout_ms = 10000 })
-  end, opts)
-  vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
-  vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
-  vim.keymap.set("n", "<leader>vws", function() vim.lsp.buf.workspace_symbol() end, opts)
-  vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
-  vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
-  vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
-  vim.keymap.set("n", "<leader>vca", function() vim.lsp.buf.code_action() end, opts)
-  vim.keymap.set("n", "<leader>vrr", function() vim.lsp.buf.references() end, opts)
-  vim.keymap.set("n", "<leader>vrn", function() vim.lsp.buf.rename() end, opts)
-  vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
-end)
 
 lsp_zero.format_on_save({
   format_opts = {
@@ -315,7 +362,7 @@ lsp_zero.format_on_save({
     -- ['tsserver'] = { 'javascript', 'typescript' },
     ['eslint'] = { 'javascript', 'typescript' },
     ['gopls'] = { 'go' },
-    ['phpactor'] = { 'php' },
+    -- ['phpactor'] = { 'php' },
     ['clangd'] = { 'c', 'cpp' },
     ['lua_ls'] = { 'lua' },
     ['sqlls'] = { 'sql' },
@@ -344,7 +391,7 @@ require('mason-lspconfig').setup({
     'taplo',
     'vimls',
     'yamlls',
-    'phpactor',
+    -- 'phpactor',
     'lua_ls'
   },
   handlers = {
@@ -371,7 +418,74 @@ cmp.setup({
   mapping = cmp.mapping.preset.insert({
     ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
     ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-    ['<C-y>'] = cmp.mapping.confirm({ select = true }),
-    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<tab>'] = cmp.mapping.confirm({ select = true }),
+    ['<C-space>'] = cmp.mapping.complete(),
   }),
 })
+
+local telescope = require('telescope.builtin')
+local wk = require("which-key")
+
+vim.keymap.set("n", "<leader>u", "<cmd>UndotreeToggle<cr><cmd>UndotreeFocus<cr>")
+vim.keymap.set("n", "<leader>w", "<cmd>write<cr>")
+vim.keymap.set("n", "<leader>e", "<cmd>Lexplore<cr>")
+vim.keymap.set({ "n", "x", "o" }, "<leader>h", "^")
+vim.keymap.set({ "n", "x", "o" }, "<leader>l", "g_")
+vim.keymap.set("n", "<leader>a", ":keepjumps normal! ggVG<cr>")
+
+lsp_zero.on_attach(function(client, bufnr)
+  lsp_zero.default_keymaps({ buffer = bufnr })
+  local opts = { buffer = bufnr, remap = false }
+  vim.keymap.set({ 'n', 'x' }, 'gq', function()
+    vim.lsp.buf.format({ async = false, timeout_ms = 10000 })
+  end, opts)
+  vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
+  vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
+  vim.keymap.set("n", "<leader>vws", function() vim.lsp.buf.workspace_symbol() end, opts)
+  vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
+  vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
+  vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
+  vim.keymap.set({ "n", "v" }, "<leader>vca", function() vim.lsp.buf.code_action() end, opts)
+  vim.keymap.set({ "n", "v" }, "<leader>vrr", function() vim.lsp.buf.references() end, opts)
+  vim.keymap.set({ "n", "v" }, "<leader>vrn", function() vim.lsp.buf.rename() end, opts)
+  vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
+end)
+
+
+wk.register({
+  w = "Write",
+  h = "Go to start",
+  l = "Go to end",
+  e = "File explorer",
+  a = "Select all",
+  m = "Toggle",
+  j = "Join",
+  s = "Split",
+  f = {
+    name = "Find",
+    e = {
+      ":Telescope file_browser<CR>",
+      "File browser"
+    },
+    f = { telescope.find_files, "Find files" },
+    t = { telescope.live_grep, "Find text" },
+    b = { telescope.buffers, "Find buffers" },
+    h = { telescope.help_tags, "Find help" },
+    g = { telescope.git_files, "Find git" },
+  },
+  u = "Undo tree",
+  g = {
+    name = "LSP",
+    f = "Format",
+    d = "Go to definition"
+  },
+  v = {
+    name = "Code",
+    d = "Open float",
+    ws = "Workspace  symbol",
+    ca = "Code action",
+    rr = "References",
+    rn = "Rename"
+  },
+  qf = "Quickfix",
+}, { prefix = "<leader>" })
