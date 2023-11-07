@@ -96,7 +96,6 @@ require("lazy").setup({
   { 'mbbill/undotree' },
   { 'nvim-lua/plenary.nvim' },
   { 'theprimeagen/harpoon' },
-  { 'akinsho/bufferline.nvim',        version = "*", dependencies = 'nvim-tree/nvim-web-devicons' },
   {
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons', opt = true }
@@ -280,6 +279,7 @@ require('treesj').setup({
 })
 
 require("telescope").load_extension "file_browser"
+require("telescope").load_extension 'harpoon'
 
 require 'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all" (the five listed parsers should always be installed)
@@ -323,20 +323,50 @@ require 'nvim-treesitter.configs'.setup {
   },
 }
 
-require("bufferline").setup {
-  options = {
-    numbers = "buffer_id"
-  }
-}
-
 require("lualine").setup()
 
 require('Comment').setup()
+
+require("harpoon").setup({
+  menu = {
+    width = vim.api.nvim_win_get_width(0) - 4,
+  },
+  global_settings = {
+    -- sets the marks upon calling `toggle` on the ui, instead of require `:w`.
+    save_on_toggle = false,
+
+    -- saves the harpoon file upon every change. disabling is unrecommended.
+    save_on_change = true,
+
+    -- sets harpoon to run the command immediately as it's passed to the terminal when calling `sendCommand`.
+    enter_on_sendcmd = false,
+
+    -- closes any tmux windows harpoon that harpoon creates when you close Neovim.
+    tmux_autoclose_windows = false,
+
+    -- filetypes that you want to prevent from adding to the harpoon list menu.
+    excluded_filetypes = { "harpoon" },
+
+    -- set marks specific to each git branch inside git repository
+    mark_branch = false,
+
+    -- enable tabline with harpoon marks
+    tabline = true,
+    tabline_prefix = "   ",
+    tabline_suffix = "   ",
+  }
+})
 
 vim.opt.termguicolors = true
 
 vim.cmd("set number")
 vim.cmd("set relativenumber")
+
+vim.cmd('highlight! HarpoonInactive guibg=NONE guifg=#63698c')
+vim.cmd('highlight! HarpoonActive guibg=NONE guifg=white')
+vim.cmd('highlight! HarpoonNumberActive guibg=NONE guifg=#7aa2f7')
+vim.cmd('highlight! HarpoonNumberInactive guibg=NONE guifg=#7aa2f7')
+vim.cmd('highlight! TabLineFill guibg=NONE guifg=white')
 
 vim.g.mapleader = " "
 
@@ -418,13 +448,17 @@ cmp.setup({
   mapping = cmp.mapping.preset.insert({
     ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
     ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-    ['<tab>'] = cmp.mapping.confirm({ select = true }),
-    ['<C-space>'] = cmp.mapping.complete(),
+    ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+    ['<C-Space>'] = cmp.mapping.complete(),
   }),
 })
 
 local telescope = require('telescope.builtin')
 local wk = require("which-key")
+local mark = require("harpoon.mark")
+local ui = require("harpoon.ui")
+
+require("harpoon.tabline").setup({})
 
 vim.keymap.set("n", "<leader>u", "<cmd>UndotreeToggle<cr><cmd>UndotreeFocus<cr>")
 vim.keymap.set("n", "<leader>w", "<cmd>write<cr>")
@@ -432,6 +466,13 @@ vim.keymap.set("n", "<leader>e", "<cmd>Lexplore<cr>")
 vim.keymap.set({ "n", "x", "o" }, "<leader>h", "^")
 vim.keymap.set({ "n", "x", "o" }, "<leader>l", "g_")
 vim.keymap.set("n", "<leader>a", ":keepjumps normal! ggVG<cr>")
+
+vim.keymap.set("n", "<C-a>", mark.add_file)
+vim.keymap.set("n", "<C-d>", mark.rm_file)
+vim.keymap.set("n", "<C-d>a", mark.clear_all)
+vim.keymap.set("n", "<C-e>", ui.toggle_quick_menu)
+vim.keymap.set("n", "<C-h>", ui.nav_prev)
+vim.keymap.set("n", "<C-l>", ui.nav_next)
 
 lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.default_keymaps({ buffer = bufnr })
@@ -470,7 +511,7 @@ wk.register({
     f = { telescope.find_files, "Find files" },
     t = { telescope.live_grep, "Find text" },
     b = { telescope.buffers, "Find buffers" },
-    h = { telescope.help_tags, "Find help" },
+    h = { ":Telescope harpoon marks<CR>", "Find harpoon marks" },
     g = { telescope.git_files, "Find git" },
   },
   u = "Undo tree",
