@@ -55,7 +55,7 @@ require("lazy").setup({
     "folke/noice.nvim",
     event = "VeryLazy",
     opts = {
-      -- add any options here
+      -- add any options hereA
     },
     dependencies = {
       -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
@@ -224,7 +224,7 @@ require("lazy").setup({
 require("nvim-surround").setup()
 
 require("gitblame").setup({
-  enabled = true
+  enabled = false
 })
 
 require("neodev").setup()
@@ -469,10 +469,10 @@ vim.keymap.set("n", "<leader>a", ":keepjumps normal! ggVG<cr>")
 
 vim.keymap.set("n", "<C-a>", mark.add_file)
 vim.keymap.set("n", "<C-d>", mark.rm_file)
-vim.keymap.set("n", "<C-d>a", mark.clear_all)
+vim.keymap.set("n", "<C-d><C-a>", mark.clear_all)
 vim.keymap.set("n", "<C-e>", ui.toggle_quick_menu)
-vim.keymap.set("n", "<C-h>", ui.nav_prev)
-vim.keymap.set("n", "<C-l>", ui.nav_next)
+vim.keymap.set("n", "<C-p>", ui.nav_prev)
+vim.keymap.set("n", "<C-n>", ui.nav_next)
 
 lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.default_keymaps({ buffer = bufnr })
