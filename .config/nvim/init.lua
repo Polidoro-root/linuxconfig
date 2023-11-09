@@ -400,7 +400,8 @@ lsp_zero.format_on_save({
     ['pyright'] = { 'python' },
     ['dockerls'] = { 'dockerfile' },
     ['yamlls'] = { 'yaml' },
-    ['rust_analyzer'] = { 'rust' }
+    ['rust_analyzer'] = { 'rust' },
+    ['terraformls'] = { 'terraform', 'tf' }
   }
 })
 
@@ -422,7 +423,8 @@ require('mason-lspconfig').setup({
     'vimls',
     'yamlls',
     -- 'phpactor',
-    'lua_ls'
+    'lua_ls',
+    'terraformls'
   },
   handlers = {
     lsp_zero.default_setup,
