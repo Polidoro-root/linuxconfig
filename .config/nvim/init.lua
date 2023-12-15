@@ -441,6 +441,8 @@ local ui = require("harpoon.ui")
 
 require("harpoon.tabline").setup({})
 
+vim.opt.clipboard:append { 'unnamed', 'unnamedplus' }
+
 vim.keymap.set("n", "<leader>u", "<cmd>UndotreeToggle<cr><cmd>UndotreeFocus<cr>")
 vim.keymap.set("n", "<leader>w", "<cmd>write<cr>")
 vim.keymap.set("n", "<leader>e", "<cmd>Lexplore<cr>")
