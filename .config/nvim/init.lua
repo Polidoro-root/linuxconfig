@@ -400,9 +400,10 @@ require('mason-lspconfig').setup({
     'taplo',
     'vimls',
     'yamlls',
-    -- 'phpactor',
     'lua_ls',
-    'terraformls'
+    'terraformls',
+    'tflint',
+    'ansiblels',
   },
   handlers = {
     lsp_zero.default_setup,
