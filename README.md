@@ -18,10 +18,15 @@ This is my main tooling for linux terminal based development, I'm migrating from
 
 > At the moment it only works on Arch based distros (the ones that I use most)
 
-Installation script to make life easier
+Installation will be made by Ansible and will install all the dependencies and configurations needed to run the tools.
+
+I created a local ansible vault file to use my secrets password ans secrets when running playbook. You can create your too with the following command: `ansible-vault create vault.yaml`, then you type your password to encrypt vault file.
+
+To run the playbook:
 
 ```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/Polidoro-root/linuxconfig/main/install.sh)"
+cd archlinux-setup
+ansible-playbook  roles/main.yaml -i hosts --ask-vault-pass -e '@vault.yaml'
 ```
 
 ### .config
@@ -32,7 +37,7 @@ Neovim custom configuration, using [Lazy](https://github.com/folke/lazy.nvim) as
 
 #### [alacritty](https://alacritty.org/)
 
-The best terminal I ever used, fast and simple. 
+The best terminal I ever used, fast and simple.
 
 #### [tmux](https://github.com/tmux/tmux)
 

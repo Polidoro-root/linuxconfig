@@ -1,0 +1,37 @@
+---
+- name: install asdf
+  become_user: "{{ user_name }}"
+  ansible.builtin.git:
+    clone: true
+    repo: https://github.com/asdf-vm/asdf.git
+    dest: "{{ lookup('env', 'HOME') }}/.asdf"
+    version: v0.13.1
+
+- name: add asdf plugins
+  become_user: "{{ user_name }}"
+  shell: |
+    alias asdf="{{ lookup('env', 'HOME') }}/.asdf/bin/asdf"
+    asdf plugin add golang https://github.com/asdf-community/asdf-golang.git
+    asdf plugin add java https://github.com/halcyon/asdf-java.git
+    asdf plugin add nodejs
+    asdf plugin add lua https://github.com/Stratus3D/asdf-lua.git
+    asdf plugin add php https://github.com/asdf-community/asdf-php.git
+    asdf plugin add python
+    asdf plugin add rust https://github.com/code-lever/asdf-rust.git
+
+- name: install asdf plugins versions
+  become_user: "{{ user_name }}"
+  shell: |
+    alias asdf="{{ lookup('env', 'HOME') }}/.asdf/bin/asdf"
+    asdf install golang latest
+    asdf install java temurin-17.0.8+7
+    asdf install nodejs latest
+    asdf install lua latest
+    asdf install php latest
+    asdf install rust 1.69.0
+
+- name: copy .tool-versions
+  copy:
+    src: .tool-versions
+    dest: "{{ lookup('env', 'HOME') }}/.tool-versions"
+    owner: "{{ user_name }}"

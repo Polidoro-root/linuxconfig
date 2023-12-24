@@ -1,0 +1,141 @@
+---
+# tasks file for pacman_config
+- name: setup sudoers
+  become: true
+  community.general.sudoers:
+    name: wheel
+    state: present
+    user: "{{ user_name }}"
+    commands: ALL
+
+- name: setup default user
+  become: true
+  ansible.builtin.user:
+    name: "{{ user_name }}"
+    password: "{{ user_password }}"
+    create_home: true
+    state: present
+    groups: wheel
+    append: true
+
+- name: setup pacman keyring
+  become: true
+  ansible.builtin.command: "pacman-key --init"
+
+- name: populate pacman keyring
+  become: true
+  ansible.builtin.command: "pacman-key --populate archlinux"
+
+- name: install archlinux keyring
+  become: true
+  ansible.builtin.pacman:
+    name: archlinux-keyring
+    state: present
+    update_cache: true
+
+- name: set pacman parallel downloads
+  become: true
+  ansible.builtin.command: sed 's/ParallelDownloads = \d+/ParallelDownloads = ${PACMAN_PARALLELDOWNLOADS}\nILoveCandy/g' -i /etc/pacman.conf
+
+- name: enable pacman progress bar
+  become: true
+  ansible.builtin.command: "sed 's/NoProgressBar/#NoProgressBar/g' -i /etc/pacman.conf"
+
+- name: sync repositories
+  become: true
+  community.general.pacman:
+    update_cache: true
+    upgrade: true
+
+- name: update system and install needed packages
+  become: true
+  community.general.pacman:
+    update_cache: true
+    state: present
+    name:
+      - git
+      - base-devel
+
+- name: install base packages
+  become: true
+  community.general.pacman:
+    update_cache: true
+    state: present
+    name:
+      - atuin
+      - autoconf
+      - alacritty
+      - bat
+      - bison
+      - curl
+      - docker
+      - docker-compose
+      - gcc
+      - go
+      - fd
+      - flatpak
+      - fontconfig
+      - fzf
+      - gd
+      - git
+      - git-lfs
+      - go
+      - gufw
+      - htop
+      - jdk17-openjdk
+      - jq
+      - lazygit
+      - libssh
+      - mysql
+      - neovim
+      - nerd-fonts
+      - networkmanager
+      - nodejs
+      - npm
+      - openssh
+      - pacman-mirrorlist
+      - php
+      - postgresql
+      - python
+      - python-pip
+      - re2c
+      - ripgrep
+      - rust
+      - timeshift
+      - tmux
+      - tmuxp
+      - ufw
+      - unzip
+      - wget
+      - yarn
+      - zsh
+      - zsh-autosuggestions
+      - zsh-completions
+      - zsh-history-substring-search
+      - zsh-syntax-highlighting
+      - zsh-theme-powerlevel10k
+
+- name: enable flatpak
+  become: true
+  ansible.builtin.command: flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+- name: enable firewall
+  become: true
+  become_user: root
+  ansible.builtin.ufw:
+    state: enabled
+
+- name: clone yay
+  become: true
+  become_user: "{{ user_name }}"
+  ansible.builtin.git:
+    clone: true
+    repo: https://aur.archlinux.org/yay.git
+    dest: /tmp/yay
+
+- name: install yay
+  become: true
+  become_user: "{{ user_name }}"
+  ansible.builtin.shell: |
+    cd /tmp/yay
+    makepkg -si --noconfirm --noprogressbar

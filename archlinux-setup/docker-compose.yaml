@@ -1,0 +1,17 @@
+version: "3.8"
+
+networks:
+  ansible:
+    driver: bridge
+
+services:
+  archlinux:
+    build:
+      context: .
+    container_name: archlinux
+    command: /usr/sbin/init
+    networks:
+      - ansible
+    privileged: true
+    cap_add:
+      - NET_ADMIN
