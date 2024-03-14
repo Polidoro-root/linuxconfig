@@ -7,3 +7,6 @@ vim.keymap.del({ "i", "x", "n", "s" }, "<C-s>")
 
 -- map <leader> + w to save file
 vim.keymap.set("n", "<leader>w", "<cmd>w<cr><esc>")
+
+-- map Lexplore to <leader> + e
+vim.keymap.set("n", "<leader>e", "<cmd>Lexplore<cr>")

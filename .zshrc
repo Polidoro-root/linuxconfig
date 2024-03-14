@@ -15,7 +15,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 export ZSH=$HOME/.oh-my-zsh
 
 # export ANDROID_HOME=$HOME/Android/Sdk
-# 
+#
 # path+=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
 # path+=$PATH:$ANDROID_HOME/platform-tools
 # path+=$PATH:$ANDROID_HOME/tools/bin
@@ -33,6 +33,8 @@ alias chcolor='/home/polidoro/.termux/colors.sh'
 alias chfont='/home/polidoro/.termux/fonts.sh'
 
 alias vim="nvim"
+
+alias tmux="tmux -u"
 
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
@@ -60,6 +62,7 @@ zinit light zdharma/fast-syntax-highlighting
 zinit light zsh-users/zsh-autosuggestions
 zinit light zsh-users/zsh-completions
 
+export GATLING_HOME=$HOME/gatling/3.10.3
 
 # export GOPATH=$HOME/.asdf/installs/golang/1.20/packages
 # export GOROOT=$HOME/.asdf/installs/golang/1.20/go
@@ -70,8 +73,10 @@ export PATH=$PATH:$HOME/.cargo/bin
 
 export PATH=$PATH:$HOME/.local/bin
 
+export PATH=$PATH:$GATLING_HOME/bin
+
 ## Set $JAVA_HOME
-# . ~/.asdf/plugins/java/set-java-home.zsh
+. ~/.asdf/plugins/java/set-java-home.zsh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -86,3 +91,9 @@ esac
 alias config='/usr/bin/git --git-dir=$HOME/.cfg --work-tree=$HOME'
 
 export PATH=~/.npm-global/bin:$PATH
+
+export PATH=~/.dotnet/tools:$PATH
+
+export PICO_SDK_PATH="$HOME/pico/pico-sdk"
+
+alias ts="$HOME/.local/bin/tmux-sessionizer"
