@@ -10,6 +10,12 @@ return {
         table.insert(opts.cmd, "--jvm-arg=" .. jvmArg)
         return opts
       end,
+      on_attach = function(_, _)
+        vim.api.nvim_create_autocmd(
+          { "BufWritePre" },
+          { pattern = "*.java", command = "lua require('jdtls').organize_imports()" }
+        )
+      end,
     },
   },
 }

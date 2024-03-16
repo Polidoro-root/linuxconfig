@@ -1,5 +1,6 @@
 return {
   "folke/flash.nvim",
+  enabled = false,
   keys = {
     -- disable the default flash keymap
     { "c-s", mode = { "c" }, false },

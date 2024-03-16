@@ -10,3 +10,6 @@ vim.keymap.set("n", "<leader>w", "<cmd>w<cr><esc>")
 
 -- map Lexplore to <leader> + e
 vim.keymap.set("n", "<leader>e", "<cmd>Lexplore<cr>")
+
+-- map undotree
+vim.keymap.set("n", "<S-u>", "<cmd>UndotreeToggle<cr>")
