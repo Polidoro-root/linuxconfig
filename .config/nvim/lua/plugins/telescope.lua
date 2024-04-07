@@ -108,6 +108,31 @@ return {
       vim.keymap.set('n', '<leader>fn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[F]ind [N]eovim files' })
+
+      -- Harpoon extension for Telescope
+      local conf = require('telescope.config').values
+      local harpoon = require 'harpoon'
+
+      local function toggle_telescope(harpoon_files)
+        local file_paths = {}
+
+        for _, item in ipairs(harpoon_files.items) do
+          table.insert(file_paths, item.value)
+        end
+
+        require('telescope.pickers')
+          .new({}, {
+            prompt_title = 'Harpoon',
+            finder = require('telescope.finders').new_table { results = file_paths },
+            previewer = conf.file_previewer {},
+            sorter = conf.generic_sorter {},
+          })
+          :find()
+      end
+
+      vim.keymap.set('n', '<leader>fe', function()
+        toggle_telescope(harpoon:list())
+      end, { desc = '[F]ind Harpoon' })
     end,
   },
 }
