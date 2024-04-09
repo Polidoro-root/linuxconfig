@@ -39,12 +39,12 @@ local function jdtls_opts()
       table.insert(opts.cmd, '--jvm-arg=' .. jvmArg)
       return opts
     end,
-    on_attach = function(_, _)
-      vim.api.nvim_create_autocmd(
-        { 'BufWritePre' },
-        { pattern = '*.java', command = "lua require('jdtls').organize_imports()" }
-      )
-    end,
+    -- on_attach = function(_, _)
+    --   vim.api.nvim_create_autocmd(
+    --     { 'BufWritePre' },
+    --     { pattern = '*.java', command = "lua require('jdtls').organize_imports()" }
+    --   )
+    -- end,
     -- How to run jdtls. This can be overridden to a full java command-line
     -- if the Python wrapper script doesn't suffice.
     cmd = { vim.fn.exepath 'jdtls' },
@@ -195,7 +195,7 @@ return {
             if opts.dap and mason_registry.is_installed 'java-debug-adapter' then
               -- custom init for Java debugger
               require('jdtls').setup_dap(opts.dap)
-              require('jdtls.dap').setup_dap_main_class_configs(opts.dap_main)
+              -- require('jdtls.dap').setup_dap_main_class_configs(opts.dap)
 
               -- Java Test require Java debugger to work
               if opts.test and mason_registry.is_installed 'java-test' then
