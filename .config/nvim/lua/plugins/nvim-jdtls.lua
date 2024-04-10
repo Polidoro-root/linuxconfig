@@ -71,6 +71,21 @@ local function jdtls_opts()
   }
 end
 
+local checkstyle = require('lint').linters.checkstyle
+
+local cwd = vim.fn.getcwd()
+
+checkstyle.args = {
+  '-c',
+  cwd .. '/checkstyle.xml',
+  '-e',
+  cwd .. '/target',
+  '-e',
+  cwd .. '/.mvn',
+  '-e',
+  cwd .. '/src/test',
+}
+
 return {
   -- Add java to treesitter.
   {

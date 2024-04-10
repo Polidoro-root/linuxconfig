@@ -115,6 +115,8 @@ return {
               callback = vim.lsp.buf.clear_references,
             })
           end
+
+          require('dap.ext.vscode').load_launchjs()
         end,
       })
 
