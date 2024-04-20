@@ -29,8 +29,8 @@ source $ZSH/oh-my-zsh.sh
 . "$HOME/.asdf/asdf.sh"
 # . ~/.asdf/plugins/java/set-java-home.zsh
 
-alias chcolor='/home/polidoro/.termux/colors.sh'
-alias chfont='/home/polidoro/.termux/fonts.sh'
+alias chcolor="/home/$HOME/.termux/colors.sh"
+alias chfont="/home/$HOME/.termux/fonts.sh"
 
 alias vim="nvim"
 
@@ -82,13 +82,13 @@ export PATH=$PATH:$GATLING_HOME/bin
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # pnpm
-export PNPM_HOME="/home/polidoro/.local/share/pnpm"
+export PNPM_HOME="/home/$HOME/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
-alias config='/usr/bin/git --git-dir=$HOME/.cfg --work-tree=$HOME'
+alias config="/usr/bin/git --git-dir=$HOME/.cfg --work-tree=$HOME"
 
 export PATH=~/.npm-global/bin:$PATH
 
@@ -97,3 +97,5 @@ export PATH=~/.dotnet/tools:$PATH
 export PICO_SDK_PATH="$HOME/pico/pico-sdk"
 
 alias ts="$HOME/.local/bin/tmux-sessionizer"
+
+export GPG_TTY=$(tty)
