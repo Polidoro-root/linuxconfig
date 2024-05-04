@@ -1,23 +1,5 @@
 ---
 # tasks file for pacman_config
-- name: setup sudoers
-  become: true
-  community.general.sudoers:
-    name: wheel
-    state: present
-    user: "{{ user_name }}"
-    commands: ALL
-
-- name: setup default user
-  become: true
-  ansible.builtin.user:
-    name: "{{ user_name }}"
-    password: "{{ user_password }}"
-    create_home: true
-    state: present
-    groups: wheel
-    append: true
-
 - name: setup pacman keyring
   become: true
   ansible.builtin.command: "pacman-key --init"
@@ -82,7 +64,7 @@
       - go
       - gufw
       - htop
-      - jdk17-openjdk
+      - jdk21-openjdk
       - jq
       - lazygit
       - libssh
