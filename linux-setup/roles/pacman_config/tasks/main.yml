@@ -82,6 +82,7 @@
       - python-pip
       - re2c
       - ripgrep
+      - rofi
       - rust
       - timeshift
       - tmux
@@ -95,7 +96,6 @@
       - zsh-completions
       - zsh-history-substring-search
       - zsh-syntax-highlighting
-      # - zsh-theme-powerlevel10k
 
 - name: enable flatpak
   become: true
