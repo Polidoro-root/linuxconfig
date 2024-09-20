@@ -98,4 +98,12 @@ export PICO_SDK_PATH="$HOME/pico/pico-sdk"
 
 alias ts="$HOME/.local/bin/tmux-sessionizer"
 
+alias terraform="tofu"
+
+alias tf="tofu"
+
 export GPG_TTY=$(tty)
+
+eval "$(ssh-agent -s)"
+
+ssh-add ~/.ssh/github_ed25519
