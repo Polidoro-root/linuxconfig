@@ -1,0 +1,81 @@
+---
+# tasks file for roles/apt_config
+- name: setup testing apt repositories
+  become: true
+  ansible.builtin.command: sed 's/bookworm/testing/g' -i /etc/apt/sources.list 
+
+- name: sync repositories
+  become: true
+  apt:
+    update_cache: true
+    upgrade: full
+
+
+- name: update system and install needed packages
+  become: true
+  apt:
+    update_cache: true
+    state: present
+    package:
+      - git
+      - build-essential
+
+- name: install base packages
+  become: true
+  apt:
+    update_cache: true
+    state: present
+    name:
+      - alacritty
+      - bat
+      - bison
+      - curl
+      - docker
+      - docker-compose
+      - fd
+      - flatpak
+      - fontconfig
+      - fzf
+      - gd
+      - git-lfs
+      - gcc
+      - go
+      - ufw
+      - htop
+      - openjdk-21-jdk
+      - jq
+      - lazygit
+      - lazydocker
+      - libssh
+      - mysql
+      - neovim
+      - nerd-fonts
+      - nodejs
+      - npm
+      - openssh
+      - php
+      - postgresql
+      - python
+      - re2c
+      - ripgrep
+      - rust
+      - timeshift
+      - tmux
+      - tmuxp
+      - unzip
+      - yarn
+      - zsh
+      - zsh-autosuggestions
+      - zsh-completions
+      - zsh-history-substring-search
+      - zsh-syntax-highlighting
+
+- name: enable flatpak
+  become: true
+  ansible.builtin.command: flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+- name: enable firewall
+  become: true
+  become_user: root
+  ansible.builtin.ufw:
+    state: enabled

@@ -14,6 +14,18 @@ This is my main tooling for linux terminal based development, I'm migrating from
 - .zshrc
 - install.sh
 
+### Git
+
+```bash
+git init --bare .cfg
+
+echo "alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'" >> $HOME/.bashrc
+
+source $HOME/.bashrc
+
+config config --local status.showUntrackedFiles no
+```
+
 ### Install
 
 > At the moment it only works on Arch based distros (the ones that I use most)
